@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Exit TV mode with `Esc` on the account selector screen.
+
+### Fixed
+
+- Preserve incognito context when launching TV mode from the popup.
+- Persist options changes even if the options page is closed quickly.
+- Correct mini guide button hover behavior.
+
+### Changed
+
+- Documentation updates.
+- Dependency updates.
+
 ## [1.0.0] - 2026-01-01
 
 ### Added
