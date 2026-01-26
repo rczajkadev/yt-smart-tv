@@ -11,6 +11,8 @@
   let options = $state<Options>({ ...emptyOptions });
   let hydrated = $state(false);
   let timeout: ReturnType<typeof setTimeout> | undefined;
+  let pendingSave = false;
+  let latestSnapshot: Options | null = null;
 
   onMount(() => {
     (async () => {
@@ -19,17 +21,30 @@
       hydrated = true;
     })();
 
-    return () => clearTimeout(timeout);
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = undefined;
+      }
+
+      if (pendingSave && latestSnapshot) {
+        pendingSave = false;
+        void setOptions(latestSnapshot);
+      }
+    };
   });
 
   $effect(() => {
     if (!hydrated) return;
 
     const snapshot: Options = { ...options };
+    latestSnapshot = snapshot;
+    pendingSave = true;
 
     // debounce
     clearTimeout(timeout);
     timeout = setTimeout(async () => {
+      pendingSave = false;
       await setOptions(snapshot);
     }, SAVE_DEBOUNCE_MS);
   });
