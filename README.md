@@ -85,10 +85,6 @@
 2. Click **Smart TV** in the left menu or the TV icon near the fullscreen button.
 3. YouTube opens in TV mode (in a new tab or window, depending on your options). Press `Esc` inside TV mode to leave.
 
-> **Note:** `Esc` closes the Smart TV window/tab only when YouTube shows the exit overlay (the one with buttons like "Exit" / "Back").
-> In some cases (especially when you're not logged in), YouTube may show a sign-in screen instead and `Esc` won't work.
-> If that happens, exit fullscreen manually and close the Smart TV window/tab yourself.
-
 ## 📱 Link your phone with a TV code
 
 You can pair your phone with YouTube running in TV mode and use it as a remote control.

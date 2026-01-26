@@ -1,25 +1,30 @@
 const OVERLAY_SELECTOR = 'yt-unified-overlay-stage';
 const TEXT_ELEMENT_SELECTOR = 'yt-formatted-string';
 const EXIT_HEADER_CONTENT = 'Exit YouTube';
+const ACCOUNT_SELECTOR_BODY_CLASS = 'WEB_PAGE_TYPE_ACCOUNT_SELECTOR';
 
 /**
  * Content script entrypoint for YouTube TV pages (`/tv`).
  *
  * @remarks
- * Watches for the "Exit YouTube" overlay. When it appears, it sends a message to the background
- * script to close the TV window.
+ * - Watches for the "Exit YouTube" overlay. When it appears, it sends a message to the background
+ *   script to close the TV window.
+ * - Also listens for the `Escape` key and closes the TV window when the page body has the
+ *   {@link ACCOUNT_SELECTOR_BODY_CLASS} class (account selector screen).
  */
 export default defineContentScript({
   matches: ['https://*.youtube.com/tv*'],
   runAt: 'document_end',
   main() {
+    window.addEventListener('keydown', handleEscKeydown, { capture: true });
+
     retryUntil(
       () => {
         const overlay = document.querySelector(OVERLAY_SELECTOR);
 
         if (!overlay) return false;
 
-        handleExit(overlay);
+        handleExitOnExitScreen(overlay);
         return true;
       },
       {
@@ -31,7 +36,7 @@ export default defineContentScript({
 
 let requestAlreadySent = false;
 
-function handleExit(overlay: Element): void {
+function handleExitOnExitScreen(overlay: Element): void {
   retryUntil(
     () => {
       if (!isExitScreenDisplayed(overlay)) return false;
@@ -47,6 +52,13 @@ function handleExit(overlay: Element): void {
       observerRoot: overlay
     }
   );
+}
+
+function handleEscKeydown(event: KeyboardEvent): void {
+  if (event.key !== 'Escape') return;
+  if (!document.body?.classList.contains(ACCOUNT_SELECTOR_BODY_CLASS)) return;
+
+  sendExitRequestOnce();
 }
 
 function sendExitRequestOnce(): void {
