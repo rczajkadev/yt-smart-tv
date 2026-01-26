@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <footer class="footer">
   <nav class="links" aria-label="Project links">
     <a
