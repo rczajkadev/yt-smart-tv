@@ -11,7 +11,8 @@
 
   const handleYouTubeTvClick = async () => {
     const options = await lazyOptions.get();
-    const incognito = false;
+    const currentWindow = await browser.windows.getCurrent();
+    const incognito = currentWindow?.incognito ?? false;
     await openYouTubeTv('', options, incognito);
     window.close();
   };
